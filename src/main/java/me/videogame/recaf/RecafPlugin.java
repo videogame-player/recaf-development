@@ -26,18 +26,20 @@ public class RecafPlugin implements Plugin<Project> {
         }
 
         try {
-            InputStream is = this.getClass().getResourceAsStream(Constants.RESOURCES_RUNNER_JAR_LOCATION);
+            byte[] fileData = new byte[0];
+            try (InputStream is = this.getClass().getResourceAsStream(Constants.RESOURCES_RUNNER_JAR_LOCATION)) {
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                int nRead;
+                byte[] data = new byte[1024];
+                while ((nRead = is.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, nRead);
+                }
 
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            int nRead;
-            byte[] data = new byte[1024];
-            while ((nRead = is.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
+                buffer.flush();
+                fileData = buffer.toByteArray();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            buffer.flush();
-            byte[] fileData = buffer.toByteArray();
-            is.close();
             File f = new File(project.getGradle().getGradleUserHomeDir(), Constants.RUNNER_JAR_LOCATION);
             f.getParentFile().mkdirs();
             f.createNewFile();
@@ -47,6 +49,8 @@ public class RecafPlugin implements Plugin<Project> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
         repositories.mavenCentral();
 
         project.getExtensions().add(Constants.GRADLE_GROUP, new RecafExtension());
@@ -58,6 +62,7 @@ public class RecafPlugin implements Plugin<Project> {
         project.getDependencies().add(Constants.IMPLEMENTATION, project.fileTree(fileTreeMap));
 
         project.afterEvaluate(this::createTasks);
+
     }
 
     private void createTasks(Project project) {
