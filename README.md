@@ -32,3 +32,5 @@ plugins {
     id "me.videogame.recaf" version "952870550c"
 }
 ```
+
+Head over [here](https://github.com/videogame-player/recaf-example-plugin)

@@ -20,7 +20,7 @@ public class RecafStart {
             System.out.println("Attempting to load " + mainClass + "!");
             try {
                 Class<? extends BasePlugin> plugin = clazz.asSubclass(BasePlugin.class);
-                PluginsManager.getInstance().addPlugin((BasePlugin) plugin.newInstance());
+                PluginsManager.getInstance().addPlugin(plugin.newInstance());
                 System.out.println("Added plugin! Launching Recaf...");
                 Recaf.main(new String[0]);
             } catch (Throwable t) {

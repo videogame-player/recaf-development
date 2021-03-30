@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class IntellijUtils {
     public static IntellijUtils INSTANCE = new IntellijUtils();
@@ -26,7 +27,7 @@ public class IntellijUtils {
         String mainClass = extension.getMainClass();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-        Document document = documentBuilder.parse(new File(".idea/workspace.xml"));
+        Document document = documentBuilder.parse(new File(Constants.INTELLIJ_WORKSPACE));
 
         Node rootNode = document.getElementsByTagName(Constants.PROJECT).item(0);
 
@@ -64,7 +65,7 @@ public class IntellijUtils {
                     // Program Arguments
                     Map<String, String> programArguments = new HashMap<>();
                     programArguments.put(Constants.NAME, Constants.PROGRAM_PARAMETERS);
-                    programArguments.put(Constants.VALUE, "--mainClass " + mainClass);
+                    programArguments.put(Constants.VALUE, "--mainClass " + Objects.requireNonNull(mainClass));
 
                     recafElement.appendChild(generateOption(document, programArguments));
 
@@ -92,22 +93,20 @@ public class IntellijUtils {
                         listNode = document.createElement("list");
                     }
 
-                    System.out.println(listNode);
-
                     listNode.appendChild(generateListItem(document, Constants.RUN_CONFIG_TYPE + "." + Constants.RUN_CONFIG_NAME));
 
                     TransformerFactory factory1 = TransformerFactory.newInstance();
 
                     Transformer transformer = factory1.newTransformer();
 
-                    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-                    transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                    transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+                    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, Constants.NO);
+                    transformer.setOutputProperty(OutputKeys.METHOD, Constants.XML);
+                    transformer.setOutputProperty(OutputKeys.INDENT, Constants.YES);
+                    transformer.setOutputProperty(OutputKeys.ENCODING, Constants.UTF8);
                     transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
                     DOMSource source = new DOMSource(document);
-                    StreamResult result = new StreamResult(new File(".idea/workspace.xml"));
+                    StreamResult result = new StreamResult(new File(Constants.INTELLIJ_WORKSPACE));
 
                     transformer.transform(source, result);
                     break;
