@@ -57,6 +57,7 @@ public class IntellijUtils {
                     // Main Class Option
                     Map<String, String> mainClassOptions = new HashMap<>();
                     mainClassOptions.put(Constants.NAME, Constants.MAIN_CLASS_NAME);
+                    mainClassOptions.put(Constants.VALUE, Constants.MAIN_CLASS);
 
                     recafElement.appendChild(generateOption(document, mainClassOptions));
 

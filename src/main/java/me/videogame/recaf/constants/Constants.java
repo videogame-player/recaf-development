@@ -12,6 +12,7 @@ public class Constants {
     public static final String INTELLIJ_OPTION = "option";
     public static final String INTELLIJ_METHOD = "method";
     public static final String INTELLIJ_MAKE = "Make";
+    public static final String MAIN_CLASS = "RecafStart";
 
     // Booleans
     public static final String TRUE = "true";
