@@ -59,7 +59,7 @@ public class RecafPlugin implements Plugin<Project> {
 
         fileTreeMap.put(Constants.DIR, project.getGradle().getGradleUserHomeDir().getAbsolutePath() + "/" + Constants.RUNNER_JAR_LOCATION);
         fileTreeMap.put(Constants.INCLUDE, Constants.RUNNER_JAR_NAME);
-        project.getDependencies().add(Constants.IMPLEMENTATION, project.fileTree(fileTreeMap));
+        project.getDependencies().add(Constants.IMPLEMENTATION, "com.github.videogame-player:recaf-runner:master-SNAPSHOT");
 
         project.afterEvaluate(this::createTasks);
 
