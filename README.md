@@ -29,7 +29,7 @@ pluginManagement {
 and then in your build.gradle put in the `plugins` block:
 ```groovy
 plugins {
-    id "me.videogame.recaf" version "952870550c"
+    id "me.videogame.recaf" version "1.1"
 }
 ```
 
