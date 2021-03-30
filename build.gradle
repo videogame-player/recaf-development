@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.0"
+}
+
+repositories {
+    maven { url "https://jitpack.io/" }
+    maven { url "http://files.minecraftforge.net/maven" }
+    mavenCentral()
+}
+
+group = "me.videogame"
+archivesBaseName = "recaf-development"
+version = "1.0.1"
+
+dependencies {
+    implementation "com.github.Col-E:Recaf:2.18.3"
+}
+
+gradlePlugin {
+    // Define the plugin
+    plugins {
+        recaf {
+            id = 'me.videogame.recaf'
+            implementationClass = 'me.videogame.recaf.RecafPlugin'
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url = "$buildDir/repository"
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = 'recaf-development'
+                url = 'https://github.com/videogame-player/recaf-development'
+
+                developers {
+                    developer {
+                        id = 'recaf-development'
+                        name = 'videogame-player'
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+}
+
+group 'me.videogame'
+version ''
+
+repositories {
+    maven { url "https://jitpack.io/" }
+    maven { url "http://files.minecraftforge.net/maven" }
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.github.Col-E:Recaf:2.18.3"
+}
+
+task moveBuild {
+    doLast {
+        def folder = new File("build/libs")
+        def files = folder.listFiles() == null ? new File[0] : folder.listFiles();
+        File f = null
+        for (File file : files) {
+            if (f == null) {
+                f = file
+                continue
+            }
+            if (f.lastModified() > file.lastModified()) {
+                f = file
+            }
+        }
+
+        f.renameTo(new File("../src/main/resources/jars/runner.jar"))
+    }
+}
+
+build.finalizedBy(moveBuild)
