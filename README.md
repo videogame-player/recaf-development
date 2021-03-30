@@ -33,4 +33,4 @@ plugins {
 }
 ```
 
-Head over [here](https://github.com/videogame-player/recaf-example-plugin)
+Head over [here](https://github.com/videogame-player/recaf-example-plugin) for an example of how to use this in a Recaf workspace.
