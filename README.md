@@ -2,7 +2,7 @@
 
 A simple gradle plugin to make creating recaf plugins simpler.
 
-## How to use?
+## How to use
 
 Simple!
 
