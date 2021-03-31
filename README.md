@@ -11,7 +11,7 @@ In your settings.gradle file put at the top
 ```groovy
 pluginManagement {
     repositories {
-        mavenLocal()
+        mavenCentral()
         maven { url "https://jitpack.io/" }
         maven { url "http://files.minecraftforge.net/maven" }
         gradlePluginPortal()
@@ -29,7 +29,7 @@ pluginManagement {
 and then in your build.gradle put in the `plugins` block:
 ```groovy
 plugins {
-    id "me.videogame.recaf" version "1.1"
+    id "me.videogame.recaf" version "1.2"
 }
 ```
 
