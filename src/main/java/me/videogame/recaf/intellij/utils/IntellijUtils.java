@@ -68,8 +68,11 @@ public class IntellijUtils {
                     // Program Arguments
                     Map<String, String> programArguments = new HashMap<>();
                     programArguments.put(Constants.NAME, Constants.PROGRAM_PARAMETERS);
-                    programArguments.put(Constants.VALUE, "--mainClass " + Objects.requireNonNull(mainClass));
-
+                    if (extension.recafArgs.size() > 0) {
+                        programArguments.put(Constants.VALUE, "--mainClass " + Objects.requireNonNull(mainClass) + " " + String.join(" ", extension.recafArgs));
+                    } else {
+                        programArguments.put(Constants.VALUE, "--mainClass " + Objects.requireNonNull(mainClass));
+                    }
                     recafElement.appendChild(generateOption(document, programArguments));
 
                     Map<String, String> methodOptions = new HashMap<>();

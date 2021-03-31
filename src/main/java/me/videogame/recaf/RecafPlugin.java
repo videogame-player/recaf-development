@@ -1,8 +1,5 @@
 package me.videogame.recaf;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import me.videogame.recaf.constants.Constants;
 import me.videogame.recaf.http.HttpUtils;
 import me.videogame.recaf.intellij.utils.IntellijUtils;
@@ -17,7 +14,6 @@ public class RecafPlugin implements Plugin<Project> {
 
     private final String[] repos = new String[]{"https://jitpack.io/", "http://files.minecraftforge.net/maven"};
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void apply(@Nonnull Project project) {
         project.getPluginManager().apply(JavaPlugin.class);
@@ -30,9 +26,9 @@ public class RecafPlugin implements Plugin<Project> {
 
         project.getExtensions().add(Constants.GRADLE_GROUP, new RecafExtension());
 
-        String runnerVersion = getGithubRepositoryLatestTag("videogame-player/recaf-runner");
+        String runnerVersion = HttpUtils.getGithubRepositoryLatestTag("videogame-player/recaf-runner");
 
-        project.getDependencies().add("runtimeOnly", "com.github.videogame-player:recaf-runner:" + runnerVersion);
+        project.getDependencies().add(Constants.RUNTIME_ONLY, "com.github.videogame-player:recaf-runner:" + runnerVersion);
 
         project.afterEvaluate(this::createTasks);
 
@@ -45,8 +41,8 @@ public class RecafPlugin implements Plugin<Project> {
         }
 
         if (extension.addRecaf) {
-            String recafVersion = getGithubRepositoryLatestTag("Col-E/Recaf");
-            project.getDependencies().add("implementation", "com.github.Col-E:Recaf:" + recafVersion);
+            String recafVersion = extension.recafVersion == null ? HttpUtils.getGithubRepositoryLatestTag("Col-E/Recaf") : extension.recafVersion;
+            project.getDependencies().add(Constants.IMPLEMENTATION, "com.github.Col-E:Recaf:" + recafVersion);
         }
         project.getTasks().create(Constants.GEN_INTELLIJ_RUNS, task -> {
             task.setGroup(Constants.GRADLE_GROUP);
@@ -59,13 +55,5 @@ public class RecafPlugin implements Plugin<Project> {
                 }
             });
         });
-    }
-
-    public String getGithubRepositoryLatestTag(String repo) {
-        String REPO_URL = "https://api.github.com/repos/" + repo + "/tags";
-        String json = HttpUtils.get(REPO_URL);
-        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
-        JsonObject latest = array.get(0).getAsJsonObject();
-        return latest.get("name").getAsString();
     }
 }
