@@ -13,7 +13,6 @@ pluginManagement {
     repositories {
         mavenCentral()
         maven { url "https://jitpack.io/" }
-        maven { url "http://files.minecraftforge.net/maven" }
         gradlePluginPortal()
     }
     resolutionStrategy {
