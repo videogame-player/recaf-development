@@ -34,3 +34,12 @@ plugins {
 ```
 
 Head over [here](https://github.com/videogame-player/recaf-example-plugin) for an example of how to use this in a Recaf workspace.
+
+Extension:
+```groovy
+recaf {
+    mainClass = "com.example.MyPlugin" // Location the plugin use for recaf-runner
+    addRecaf = true // Adds the Recaf dependency to the project
+    recafVersion = "2.18.3" // If you want to use a different version specify here
+}
+```

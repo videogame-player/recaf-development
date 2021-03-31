@@ -25,22 +25,16 @@ public class Constants {
     public static final String ENABLED = "enabled";
     public static final String COMPONENT = "component";
     public static final String PROJECT = "project";
-    public static final String INCLUDE = "include";
     public static final String NAME = "name";
     public static final String VALUE = "value";
     public static final String TYPE = "type";
     public static final String ITEM = "item";
     public static final String LIST = "list";
     public static final String UTF8 = "UTF-8";
-    public static final String DIR = "dir";
     public static final String XML = "xml";
 
-    // Gradle
-    public static final String RUNNER_JAR_LOCATION = "caches/recaf/runner/runner.jar";
     public static final String GEN_INTELLIJ_RUNS = "createIntellijRun";
-    public static final String RESOURCES_RUNNER_JAR_LOCATION = "/jars/runner.jar";
-    public static final String RUNNER_JAR_NAME = "runner.jar";
     public static final String IMPLEMENTATION = "implementation";
+    public static final String RUNTIME_ONLY = "runtimeOnly";
     public static final String GRADLE_GROUP = "recaf";
-    public static final String RUN_RECAF = "runRecaf";
 }

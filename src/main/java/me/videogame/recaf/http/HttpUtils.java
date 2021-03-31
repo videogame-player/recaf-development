@@ -1,5 +1,9 @@
 package me.videogame.recaf.http;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -18,5 +22,13 @@ public class HttpUtils {
         }
 
         return builder.toString();
+    }
+
+    public static String getGithubRepositoryLatestTag(String repo) {
+        String REPO_URL = "https://api.github.com/repos/" + repo + "/tags";
+        String json = get(REPO_URL);
+        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
+        JsonObject latest = array.get(0).getAsJsonObject();
+        return latest.get("name").getAsString();
     }
 }
