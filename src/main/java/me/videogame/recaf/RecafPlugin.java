@@ -1,6 +1,10 @@
 package me.videogame.recaf;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import me.videogame.recaf.constants.Constants;
+import me.videogame.recaf.http.HttpUtils;
 import me.videogame.recaf.intellij.utils.IntellijUtils;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -8,9 +12,6 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.plugins.JavaPlugin;
 
 import javax.annotation.Nonnull;
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RecafPlugin implements Plugin<Project> {
 
@@ -25,52 +26,29 @@ public class RecafPlugin implements Plugin<Project> {
             repositories.maven(block -> block.setUrl(repo));
         }
 
-        try {
-            byte[] fileData = new byte[0];
-            try (InputStream is = this.getClass().getResourceAsStream(Constants.RESOURCES_RUNNER_JAR_LOCATION)) {
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                int nRead;
-                byte[] data = new byte[1024];
-                while ((nRead = is.read(data, 0, data.length)) != -1) {
-                    buffer.write(data, 0, nRead);
-                }
-
-                buffer.flush();
-                fileData = buffer.toByteArray();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            File f = new File(project.getGradle().getGradleUserHomeDir(), Constants.RUNNER_JAR_LOCATION);
-            f.getParentFile().mkdirs();
-            f.createNewFile();
-            try (FileOutputStream fos = new FileOutputStream(f)) {
-                fos.write(fileData);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
         repositories.mavenCentral();
 
         project.getExtensions().add(Constants.GRADLE_GROUP, new RecafExtension());
 
-        Map<String, String> fileTreeMap = new HashMap<>();
+        String runnerVersion = getGithubRepositoryLatestTag("videogame-player/recaf-runner");
 
-        fileTreeMap.put(Constants.DIR, project.getGradle().getGradleUserHomeDir().getAbsolutePath() + "/" + Constants.RUNNER_JAR_LOCATION);
-        fileTreeMap.put(Constants.INCLUDE, Constants.RUNNER_JAR_NAME);
-        project.getDependencies().add(Constants.IMPLEMENTATION, "com.github.videogame-player:recaf-runner:master-SNAPSHOT");
+        project.getDependencies().add("runtimeOnly", "com.github.videogame-player:recaf-runner:" + runnerVersion);
 
         project.afterEvaluate(this::createTasks);
 
     }
 
     private void createTasks(Project project) {
+        RecafExtension extension = project.getExtensions().findByType(RecafExtension.class);
+        if (extension == null) {
+            throw new IllegalStateException("Failed to find the recaf extension (recaf { })");
+        }
+
+        if (extension.addRecaf) {
+            String recafVersion = getGithubRepositoryLatestTag("Col-E/Recaf");
+            project.getDependencies().add("implementation", "com.github.Col-E:Recaf:" + recafVersion);
+        }
         project.getTasks().create(Constants.GEN_INTELLIJ_RUNS, task -> {
-            RecafExtension extension = project.getExtensions().findByType(RecafExtension.class);
-            if (extension == null) {
-                throw new IllegalStateException("Failed to find the recaf extension (recaf { })");
-            }
             task.setGroup(Constants.GRADLE_GROUP);
             task.doLast(block -> {
                 try {
@@ -81,5 +59,13 @@ public class RecafPlugin implements Plugin<Project> {
                 }
             });
         });
+    }
+
+    public String getGithubRepositoryLatestTag(String repo) {
+        String REPO_URL = "https://api.github.com/repos/" + repo + "/tags";
+        String json = HttpUtils.get(REPO_URL);
+        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
+        JsonObject latest = array.get(0).getAsJsonObject();
+        return latest.get("name").getAsString();
     }
 }
