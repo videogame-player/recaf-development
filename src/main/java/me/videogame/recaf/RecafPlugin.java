@@ -1,8 +1,5 @@
 package me.videogame.recaf;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import me.videogame.recaf.constants.Constants;
 import me.videogame.recaf.http.HttpUtils;
 import me.videogame.recaf.intellij.utils.IntellijUtils;

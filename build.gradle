@@ -15,8 +15,7 @@ archivesBaseName = "recaf-development"
 version = "1.2"
 
 dependencies {
-    implementation "com.github.Col-E:Recaf:2.18.3"
-    implementation "com.google.code.gson:gson:2.8.6"
+    implementation "com.eclipsesource.minimal-json:minimal-json:0.9.5"
 }
 
 gradlePlugin {
