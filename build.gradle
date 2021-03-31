@@ -16,10 +16,10 @@ version = "1.1"
 
 dependencies {
     implementation "com.github.Col-E:Recaf:2.18.3"
+    implementation "com.google.code.gson:gson:2.8.6"
 }
 
 gradlePlugin {
-    // Define the plugin
     plugins {
         recaf {
             id = 'me.videogame.recaf'

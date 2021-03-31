@@ -24,7 +24,10 @@ public class IntellijUtils {
     public static IntellijUtils INSTANCE = new IntellijUtils();
 
     public void createRunConfig(RecafExtension extension) throws ParserConfigurationException, IOException, SAXException, TransformerException {
-        String mainClass = extension.getMainClass();
+        String mainClass = extension.mainClass;
+        if (mainClass == null) {
+            throw new IllegalStateException("You must specify a plugin main class");
+        }
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = factory.newDocumentBuilder();
         Document document = documentBuilder.parse(new File(Constants.INTELLIJ_WORKSPACE));
