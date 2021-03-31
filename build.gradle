@@ -12,7 +12,7 @@ repositories {
 
 group = "me.videogame"
 archivesBaseName = "recaf-development"
-version = "1.1"
+version = "1.2"
 
 dependencies {
     implementation "com.github.Col-E:Recaf:2.18.3"
