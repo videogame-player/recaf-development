@@ -37,7 +37,7 @@ public class RecafPlugin implements Plugin<Project> {
     private void createTasks(Project project) {
         RecafExtension extension = project.getExtensions().findByType(RecafExtension.class);
         if (extension == null) {
-            throw new IllegalStateException("Failed to find the recaf extension (recaf { })");
+            throw new IllegalStateException("Failed to find the Recaf extension (This is bad)");
         }
 
         if (extension.addRecaf) {
@@ -50,7 +50,7 @@ public class RecafPlugin implements Plugin<Project> {
                 try {
                     IntellijUtils.INSTANCE.createRunConfig(extension);
                 } catch (Exception e) {
-                    System.err.println("Failed to create Intellij Run Configuration");
+                    System.err.println("Failed to create Intellij run configuration");
                     e.printStackTrace();
                 }
             });

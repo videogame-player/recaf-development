@@ -2,6 +2,7 @@ package me.videogame.recaf.intellij.utils;
 
 import me.videogame.recaf.RecafExtension;
 import me.videogame.recaf.constants.Constants;
+import me.videogame.recaf.iterator.NodeListIterator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -30,14 +31,19 @@ public class IntellijUtils {
         }
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-        Document document = documentBuilder.parse(new File(Constants.INTELLIJ_WORKSPACE));
+        File workspaceFile = new File(Constants.INTELLIJ_WORKSPACE);
+        Document document = documentBuilder.parse(workspaceFile);
 
-        Node rootNode = document.getElementsByTagName(Constants.PROJECT).item(0);
+        Node rootNode = document
+                .getElementsByTagName(Constants.PROJECT)
+                .item(0);
 
         NodeList rootNodeChildren = rootNode.getChildNodes();
 
-        for (int i = 0; i < rootNodeChildren.getLength(); i++) {
-            Node projectNodeChild = rootNodeChildren.item(i);
+        NodeListIterator iterator = new NodeListIterator(rootNodeChildren);
+
+        while (iterator.hasNext()) {
+            Node projectNodeChild = iterator.next();
             String nodeName = projectNodeChild.getNodeName();
 
             if (nodeName.equals(Constants.COMPONENT)) {
@@ -51,7 +57,6 @@ public class IntellijUtils {
                     Map<String, String> recafElementMap = new HashMap<>();
 
                     // Name
-                    recafElementMap.put(Constants.NAME, Constants.RUN_CONFIG_NAME);
                     recafElementMap.put(Constants.TYPE, Constants.RUN_CONFIG_TYPE);
                     recafElementMap.put(Constants.FACTORY_NAME, Constants.RUN_CONFIG_TYPE);
                     recafElementMap.put(Constants.NAME_IS_GENERATED, Constants.TRUE);
@@ -112,7 +117,7 @@ public class IntellijUtils {
                     transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
                     DOMSource source = new DOMSource(document);
-                    StreamResult result = new StreamResult(new File(Constants.INTELLIJ_WORKSPACE));
+                    StreamResult result = new StreamResult(workspaceFile);
 
                     transformer.transform(source, result);
                     break;
